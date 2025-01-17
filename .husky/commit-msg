@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+COMMIT_MSG_FILE=$1
+
+# Read the commit message
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Allowed types
+ALLOWED_TYPES="feat|fix|docs|style|refactor|test|chore"
+
+# Validate the commit message format
+if ! echo "$COMMIT_MSG" | grep -qE "^PC-[0-9]+-($ALLOWED_TYPES): .+"; then
+  echo "ERROR: Commit message must follow the format 'PC-<number>-<type>: <message>'"
+  echo "Allowed types are: feat, fix, docs, style, refactor, test, chore"
+  exit 1
+fi

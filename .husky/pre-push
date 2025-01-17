@@ -1,0 +1,36 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+pnpm test || (echo "Tests failed! Push aborted." && exit 1)
+
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# File to store the last push time
+LAST_PUSH_FILE=".git/last_push_time"
+
+# Get the current timestamp in seconds
+CURRENT_TIME=$(date +%s)
+
+# Check if we are in a valid Git repository
+if [ ! -d ".git" ]; then
+    echo "Not a valid Git repository. Push aborted."
+    exit 1
+fi
+
+# Check if the last push file exists and calculate the time difference
+if [ -f "$LAST_PUSH_FILE" ]; then
+    LAST_PUSH_TIME=$(cat "$LAST_PUSH_FILE" 2>/dev/null || echo 0)
+    TIME_DIFF=$((CURRENT_TIME - LAST_PUSH_TIME))
+
+    if [ $TIME_DIFF -lt 300 ]; then
+        echo "You pushed less than 5 minutes ago. Please wait before pushing again."
+        exit 1
+    fi
+fi
+
+# Update the last push time
+echo $CURRENT_TIME > "$LAST_PUSH_FILE"

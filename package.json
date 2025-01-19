@@ -6,7 +6,62 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .ts,.tsx,.js,.jsx",
+    "lint:fix": "next lint --fix",
+    "prepare": "husky && husky install",
+    "test": "jest",
+    "lint:write": "next lint --cache --fix",
+    "test-all": "pnpm test && pnpm lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "pnpm eslint --fix",
+      "pnpm prettier --write"
+    ],
+    "**/*.{json,css,md}": [
+      "pnpm prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm run lint-staged",
+      "pre-push": "pnpm run lint-staged"
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:prettier/recommended",
+      "plugin:react/recommended",
+      "prettier",
+      "next/core-web-vitals"
+    ],
+    "rules": {
+      "no-console": [
+        "error",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ],
+      "no-warning-comments": [
+        "error",
+        {
+          "terms": [
+            "TODO",
+            "FIXME",
+            "HACK"
+          ],
+          "location": "anywhere"
+        }
+      ]
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "coverageDirectory": "coverage"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -22,6 +77,13 @@
     "tailwindcss": "^3.4.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
-    "@eslint/eslintrc": "^3"
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.3.0",
+    "prettier": "3.4.2"
   }
 }

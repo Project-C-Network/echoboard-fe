@@ -4,7 +4,7 @@ const LoginPage = () => {
   return (
     <>
       <h2>Welocome to
-         Login...</h2>
+         Login page...</h2>
     </>
   );
 };

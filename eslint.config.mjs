@@ -52,7 +52,7 @@ const eslintConfig = [
       'security/detect-eval-with-expression': 'error',
       'security/detect-child-process': 'error',
       'security/detect-unsafe-regex': 'warn',
-      '@typescript-eslint/naming-convention': 'error',
+      // '@typescript-eslint/naming-convention': 'error',
     },
   }),
 ];

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function liveBlogLayout({
+export default function LiveBlogLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

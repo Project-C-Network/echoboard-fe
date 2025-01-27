@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LIVE_BLOG = () => {
+const LiveBlogPage = () => {
   return (
     <>
       <h2>Welocome to Live Blog...</h2>
@@ -8,4 +8,4 @@ const LIVE_BLOG = () => {
   );
 };
 
-export default LIVE_BLOG;
+export default LiveBlogPage;

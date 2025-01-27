@@ -1,4 +1,6 @@
 'use client';
+import Image from 'next/image';
+import Dicaprio from '../../public/Images/WelcomePage/S5s.gif';
 import { EBButton } from './liveblog/common/components/EBButton';
 import { EBTypingText } from './liveblog/common/components/EBTypingText';
 
@@ -11,7 +13,16 @@ export default function home() {
       <div className='grid lg:grid-cols-2 gap-4'>
         <div className='hidden lg:block'>
           <div className='flex justify-center items-center min-h-screen'>
-            <h1 className='text-EBSecondary text-90 font-dark'>EchoBoard {'>'}</h1>
+            <div className='relative border-2 border-EBSecondary'>
+              <h1 className='relative text-[100px] font-bold uppercase text-EBLight bg-clip-text px-5'>
+                EchoBoard
+              </h1>
+              <Image
+                src={Dicaprio}
+                alt='GIF Background'
+                className='absolute top-0 left-0 w-full h-full object-cover opacity-50'
+              />
+            </div>
           </div>
         </div>
         <div className='flex flex-col items-center justify-center min-h-screen'>

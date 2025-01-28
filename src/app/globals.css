@@ -19,3 +19,11 @@ body {
   background: var(--background);
   font-family: var(--font-poppins, Arial, Helvetica, sans-serif);
 }
+
+.welcomePageHeroSection {
+  -webkit-text-stroke: 2px #ffeb3b;
+  background-image: url('../../public/Images/WelcomePage/1AJ3.gif');
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

@@ -6,7 +6,7 @@ export default function home() {
   return (
     <div className='bg-EBPrimary-100 container'>
       <div className='flex justify-end'>
-        <div className='pt-4 pe-0 md:pe-5'>01</div>
+        <div className='pt-4 pe-0 md:pe-5' />
       </div>
       <div className='grid lg:grid-cols-2 gap-4'>
         <div className='flex items-center justify-center h-screen'>

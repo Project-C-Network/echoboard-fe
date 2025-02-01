@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useDarkMode } from './common/common/hooks/useDarkMode';
 import { EBButton } from './liveblog/common/components/EBButton';
-import { EBTypingText } from './liveblog/common/components/EBTypingText';
+import { EBTypingContent } from './liveblog/common/components/EBTypingContent';
 
 export default function Home() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -36,18 +36,23 @@ export default function Home() {
           </div>
         </div>
         <div className='flex flex-col items-center justify-center min-h-screen sm:mt-[60px] md:mt-[30px] lg:[0px]'>
-          <EBTypingText
+          <EBTypingContent
             text='Welcome.'
             className='text-EBSecondary sm:text-72 lg:text-62 xl:text-72 text-center font-dark'
           />
-          <p className='text-EBLight sm:text-16 md:text-14 xl:text-16 text-center font-semibold max-w-[500px] pt-5 pb-5'>
-            "Got a question? Ask away! Need an answer? Get it fast! Once resolved, it’s gone—like an
-            echo in the wind!"
-          </p>
-          <p className='text-EBLight sm:text-16 md:text-14 xl:text-16 text-center font-semibold max-w-[470px] pb-5'>
-            - "EchoBoard is a temporary chat-based Q&A platform where questions get quick answers
-            and disappear once resolved. Engage, contribute, and keep discussions fresh!"
-          </p>
+          <EBTypingContent
+            motionType='Blur'
+            className='text-EBLight sm:text-16 md:text-14 xl:text-16 text-center font-semibold max-w-[500px] pt-5 pb-5'
+            text={`"Got a question? Ask away! Need an answer? Get it fast! Once resolved, it’s gone—like an
+  echo in the wind!"`}
+          />
+          <EBTypingContent
+            motionType='Blur'
+            className='text-EBLight sm:text-16 md:text-14 xl:text-16 text-center font-semibold max-w-[500px] pb-5'
+            text={`
+  "EchoBoard is a temporary chat-based Q&A platform where questions get quick answers
+  and disappear once resolved. Engage, contribute, and keep discussions fresh!"`}
+          />
           <EBButton>
             <div className='flex items-center justify-center'>
               <i className='ri-google-fill text-26 pe-3' /> Sign in with Google

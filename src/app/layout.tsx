@@ -25,8 +25,19 @@ export default function rootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${poppins.variable} ${roboto.variable} antialiased`}>{children}</body>
+    <html lang='en' suppressHydrationWarning>
+      <head>
+        <link
+          href='https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css'
+          rel='stylesheet'
+        />
+      </head>
+      <body
+        suppressHydrationWarning
+        className={`${poppins.variable} ${roboto.variable} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

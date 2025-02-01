@@ -8,7 +8,7 @@ interface EBButtonProps {
 
 export const EBButton: React.FC<EBButtonProps> = ({
   children,
-  className = 'mt-4 px-6 py-3 text-white font-semibold rounded-full shadow-lg bg-gradient-to-r from-[#03a9f4] to-[#ffeb3b]',
+  className = 'mt-4 px-6 py-3 min-w-[250px] text-white font-semibold rounded-full shadow-lg bg-gradient-to-r from-[#03a9f4] to-[#ffeb3b]',
 }) => {
   return (
     <motion.button

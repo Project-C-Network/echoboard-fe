@@ -5,7 +5,7 @@ import React from 'react';
 import Home from './page';
 
 describe.skip('WelcomePage Component', () => {
-  test('renders without crashing', () => {
+  test('renders without crashings', () => {
     render(<Home />);
     expect(screen.getByText('Welcome.')).toBeInTheDocument();
   });

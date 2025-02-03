@@ -10,10 +10,10 @@ export default {
   theme: {
     extend: {
       container: {
-        center: true, 
-        padding: '2rem', 
+        center: true,
+        padding: '2rem',
         screens: {
-          sm: '100%', 
+          sm: '100%',
           md: '768px',
           lg: '1024px',
           xl: '1280px',
@@ -31,34 +31,34 @@ export default {
         'container-fluid': '100%',
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
         EBPrimary: {
-          100: "#03a9f4",
-          200: "#2196f3",
-        }, 
-        EBSecondary: "#ffeb3b",
-        EBLight: "#ffffff",
-        EBDark: "#000000",
-        EBMaroon: "#e91e63",
-        EBSuccess: {
-          100: "#18f241",
-          200: "#8bc34a",
+          100: '#03a9f4',
+          200: '#2196f3',
         },
-        EBDanger: "#f44336",
-        EBOliveGreen: "#b0ba46",
-        EBAmber: "#ff9800"
+        EBSecondary: '#ffeb3b',
+        EBLight: '#ffffff',
+        EBDark: '#000000',
+        EBMaroon: '#e91e63',
+        EBSuccess: {
+          100: '#18f241',
+          200: '#8bc34a',
+        },
+        EBDanger: '#f44336',
+        EBOliveGreen: '#b0ba46',
+        EBAmber: '#ff9800',
       },
       fontWeight: {
-        thin: "100",
-        extralight: "200",
-        light: "300",
-        normal: "400",
-        medium: "500",
-        semibold: "600",
-        bold: "700",
-        extrabold: "800",
-        dark: "900",
+        thin: '100',
+        extralight: '200',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+        extrabold: '800',
+        dark: '900',
       },
       backgroundImage: {
         none: 'none',
@@ -144,7 +144,125 @@ export default {
         poppins: ['var(--font-poppins)', 'sans-serif'],
         roboto: ['var(--font-roboto)', 'sans-serif'],
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            h1: {
+              fontSize: '28px',
+              lineHeight: '1.2',
+              '@screen md': {
+                fontSize: '34px',
+                lineHeight: '1.3',
+              },
+              '@screen lg': {
+                fontSize: '44px',
+                lineHeight: '1.4',
+              },
+              '@screen xl': {
+                fontSize: '52px',
+                lineHeight: '1.5',
+              },
+            },
+            h2: {
+              fontSize: '24px',
+              lineHeight: '1.3',
+              '@screen md': {
+                fontSize: '30px',
+                lineHeight: '1.4',
+              },
+              '@screen lg': {
+                fontSize: '38px',
+                lineHeight: '1.5',
+              },
+              '@screen xl': {
+                fontSize: '46px',
+                lineHeight: '1.6',
+              },
+            },
+            h3: {
+              fontSize: '20px',
+              lineHeight: '1.4',
+              '@screen md': {
+                fontSize: '26px',
+                lineHeight: '1.5',
+              },
+              '@screen lg': {
+                fontSize: '32px',
+                lineHeight: '1.6',
+              },
+              '@screen xl': {
+                fontSize: '40px',
+                lineHeight: '1.7',
+              },
+            },
+            h4: {
+              fontSize: '18px',
+              lineHeight: '1.5',
+              '@screen md': {
+                fontSize: '22px',
+                lineHeight: '1.6',
+              },
+              '@screen lg': {
+                fontSize: '28px',
+                lineHeight: '1.7',
+              },
+              '@screen xl': {
+                fontSize: '34px',
+                lineHeight: '1.8',
+              },
+            },
+            h5: {
+              fontSize: '16px',
+              lineHeight: '1.6',
+              '@screen md': {
+                fontSize: '20px',
+                lineHeight: '1.7',
+              },
+              '@screen lg': {
+                fontSize: '24px',
+                lineHeight: '1.8',
+              },
+              '@screen xl': {
+                fontSize: '30px',
+                lineHeight: '1.9',
+              },
+            },
+            h6: {
+              fontSize: '14px',
+              lineHeight: '1.6',
+              '@screen md': {
+                fontSize: '18px',
+                lineHeight: '1.7',
+              },
+              '@screen lg': {
+                fontSize: '22px',
+                lineHeight: '1.8',
+              },
+              '@screen xl': {
+                fontSize: '26px',
+                lineHeight: '1.9',
+              },
+            },
+            p: {
+              fontSize: '16px',
+              lineHeight: '1.8',
+              '@screen md': {
+                fontSize: '18px',
+                lineHeight: '1.9',
+              },
+              '@screen lg': {
+                fontSize: '20px',
+                lineHeight: '2.0',
+              },
+              '@screen xl': {
+                fontSize: '22px',
+                lineHeight: '2.1',
+              },
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 } satisfies Config;

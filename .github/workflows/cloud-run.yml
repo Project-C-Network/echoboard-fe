@@ -28,13 +28,22 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Enable required APIs
+      - name: Check if Billing is Enabled
+        run: |
+          BILLING_STATUS=$(gcloud beta billing projects describe ${{ secrets.GCP_PROJECT_ID }} --format="value(billingEnabled)")
+          if [[ "$BILLING_STATUS" != "True" ]]; then
+            echo "Error: Billing is not enabled for project ${{ secrets.GCP_PROJECT_ID }}."
+            exit 1
+          fi
+
+      - name: Enable Required APIs
         run: |
           gcloud services enable artifactregistry.googleapis.com \
           cloudbuild.googleapis.com \
-          run.googleapis.com
+          run.googleapis.com \
+          containerregistry.googleapis.com
 
-      - name: Grant IAM permissions
+      - name: Grant IAM Permissions
         run: |
           gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
             --member="serviceAccount:${{ secrets.GCP_SA_KEY }}" \

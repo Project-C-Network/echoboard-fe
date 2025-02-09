@@ -1,50 +1,58 @@
 name: Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: echoboard-fe # Providing name of the service
-  REGION: us-central1 # To reach global traffic
+  SERVICE_NAME: echoboard-fe # Name of the service
+  REGION: us-central1 # Deployment region
 
 on:
   push:
-    branches: # Target branch for pushing main code
+    branches:
       - main
-  pull_request: # Target branch for pulling main code
+  pull_request:
     branches:
       - main
 
 jobs:
-  dockerize-and-deploy: # Provides a pre-configured Ubuntu virtual machine
+  dockerize-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository # Descriptive label for this step
-        uses: actions/checkout@v2 # Pre-built GitHub Action that clones the repository into the runner
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Google Cloud Auth
-        uses: google-github-actions/auth@v2 # Authenticate Google Cloud & implicitly sets the project based on the service account JSON
+        uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}' # Added GCP Run JSON key in github secret actions
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Set up Cloud SDK # Official GitHub Action provided by Google to install the Google Cloud SDK on the runner
-        uses: google-github-actions/setup-gcloud@v2 # Installs and configures the Google Cloud SDK on the GitHub Actions runner
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-      # Push images to Google Container Registry (GCR) or Artifact Registry
-      # Run command to push images to Google Container Registry (GCR)
+      - name: Enable required APIs
+        run: |
+          gcloud services enable artifactregistry.googleapis.com \
+          cloudbuild.googleapis.com \
+          run.googleapis.com
+
+      - name: Grant IAM permissions
+        run: |
+          gcloud projects add-iam-policy-binding ${{ secrets.GCP_PROJECT_ID }} \
+            --member="serviceAccount:${{ secrets.GCP_SA_KEY }}" \
+            --role="roles/artifactregistry.writer"
+
       - name: Configure gcloud CLI
         run: |
-          gcloud auth configure-docker gcr.io
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build and Push Docker Image
-        run:
-          | # Builds a Docker image from the current directory & pushes the built image to Google Container Registry (GCR)
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest .
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+        run: |
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ secrets.DOCKER_IMAGE_NAME }}:latest .
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
-      - name: Deploy to Cloud Run # Deploy a container to Cloud Run
-        run:
-          | #  Tells Cloud Run to use fully managed serverless infrastructure & allow public access to your Cloud Run service under port 3000
+      - name: Deploy to Cloud Run
+        run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/${{ secrets.DOCKER_IMAGE_NAME }}:latest \
             --platform managed \
             --region ${{ env.REGION }} \
             --allow-unauthenticated \

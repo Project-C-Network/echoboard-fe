@@ -1,8 +1,8 @@
 name: Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: echoboard-fe  # Providing name of the service
-  REGION: us-central1  # To reach global traffic
+  SERVICE_NAME: echoboard-fe # Providing name of the service
+  REGION: us-central1 # To reach global traffic
 
 on:
   push:
@@ -23,24 +23,26 @@ jobs:
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v2 # Authenticate Google Cloud & implicitly sets the project based on the service account JSON
         with:
-            credentials_json: '${{ secrets.GCP_SA_KEY }}' # Added GCP Run JSON key in github secret actions
+          credentials_json: '${{ secrets.GCP_SA_KEY }}' # Added GCP Run JSON key in github secret actions
 
       - name: Set up Cloud SDK # Official GitHub Action provided by Google to install the Google Cloud SDK on the runner
         uses: google-github-actions/setup-gcloud@v2 # Installs and configures the Google Cloud SDK on the GitHub Actions runner
 
       # Push images to Google Container Registry (GCR) or Artifact Registry
       # Run command to push images to Google Container Registry (GCR)
-      - name: Configure gcloud CLI 
-         run: |  
-            gcloud auth configure-docker gcr.io
+      - name: Configure gcloud CLI
+        run: |
+          gcloud auth configure-docker gcr.io
 
       - name: Build and Push Docker Image
-        run: | # Builds a Docker image from the current directory & pushes the built image to Google Container Registry (GCR)
+        run:
+          | # Builds a Docker image from the current directory & pushes the built image to Google Container Registry (GCR)
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest .
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
       - name: Deploy to Cloud Run # Deploy a container to Cloud Run
-        run: |  #  Tells Cloud Run to use fully managed serverless infrastructure & allow public access to your Cloud Run service under port 3000
+        run:
+          | #  Tells Cloud Run to use fully managed serverless infrastructure & allow public access to your Cloud Run service under port 3000
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest \
             --platform managed \

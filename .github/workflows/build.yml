@@ -1,18 +1,39 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 jobs:
-  sonarcloud:
+  sonarqube:
+    name: SonarQube
     runs-on: ubuntu-latest
     steps:
-      - name: "EchoBoard SonarCloud Build Analysis"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure complete history for better analysis
+
+      - name: Install dependencies
+        run: sudo apt-get install -y jq
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: "Wait for SonarQube Analysis"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          echo "Waiting for SonarCloud to finish analysis..."
+          echo "Waiting for SonarQube to finish analysis..."
           
           STATUS="PENDING"
           WAIT_TIME=5  # Start with 5 seconds wait
 
-          while [ "$STATUS" == "PENDING" ]; do
+          while [ "$STATUS" = "PENDING" ]; do
             sleep $WAIT_TIME  # Wait before checking again
 
             STATUS=$(curl -s -u $SONAR_TOKEN: \
@@ -32,4 +53,4 @@ jobs:
             exit 1
           fi
 
-          echo "✅ SonarCloud analysis completed successfully."
+          echo "✅ SonarQube analysis completed successfully."

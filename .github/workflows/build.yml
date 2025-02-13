@@ -23,12 +23,12 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: "Wait for SonarQube Analysis"
+      - name: "Wait for SonarQube Analysis (Polling)"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          echo "Waiting for SonarQube to finish analysis..."
+          echo "Waiting for SonarQube to complete analysis..."
           
           STATUS="PENDING"
           WAIT_TIME=5  # Start with 5 seconds wait
@@ -37,10 +37,10 @@ jobs:
             sleep $WAIT_TIME  # Wait before checking again
 
             STATUS=$(curl -s -u $SONAR_TOKEN: \
-              "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=my-project" \
-              | jq -r .projectStatus.status)
+              "$SONAR_HOST_URL/api/ce/task?componentKey=my-project" \
+              | jq -r '.task.status')
 
-            echo "Current Quality Gate Status: $STATUS"
+            echo "Current SonarQube Analysis Status: $STATUS"
 
             # Gradually increase wait time (max 30s)
             if [ "$WAIT_TIME" -lt 30 ]; then
@@ -48,9 +48,31 @@ jobs:
             fi
           done
 
-          if [ "$STATUS" != "OK" ]; then
-            echo "❌ Quality Gate failed! Stopping the workflow."
+          if [ "$STATUS" != "SUCCESS" ]; then
+            echo "❌ SonarQube analysis failed! Stopping workflow."
             exit 1
           fi
 
           echo "✅ SonarQube analysis completed successfully."
+
+      - name: "Check for Vulnerabilities"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          echo "Checking for vulnerabilities in SonarQube..."
+          
+          # Fetch the number of vulnerabilities
+          VULNERABILITIES=$(curl -s -u $SONAR_TOKEN: \
+            "$SONAR_HOST_URL/api/issues/search?componentKeys=my-project&types=VULNERABILITY&resolved=false" \
+            | jq -r '.total')
+
+          echo "Detected Vulnerabilities: $VULNERABILITIES"
+
+          # Fail if any vulnerabilities are found
+          if [ "$VULNERABILITIES" -gt 0 ]; then
+            echo "❌ SonarCloud detected vulnerabilities! Failing the workflow."
+            exit 1
+          fi
+
+          echo "✅ No vulnerabilities found. Proceeding with workflow."

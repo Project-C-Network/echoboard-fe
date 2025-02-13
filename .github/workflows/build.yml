@@ -1,19 +1,31 @@
-name: Build
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
-jobs:
-  sonarqube:
-    name: SonarQube
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+- name: EchoBoard SonarCloud Build Analysis
+  env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    SONAR_HOST_URL: https://sonarcloud.io
+  run: |
+    echo "Waiting for SonarCloud to finish analysis..."
+    
+    STATUS="PENDING"
+    WAIT_TIME=5  # Start with 5 seconds wait
+
+    while [ "$STATUS" == "PENDING" ]; do
+      sleep $WAIT_TIME  # Wait before checking again
+
+      STATUS=$(curl -s -u $SONAR_TOKEN: \
+        "$SONAR_HOST_URL/api/qualitygates/project_status?projectKey=my-project" \
+        | jq -r .projectStatus.status)
+
+      echo "Current Quality Gate Status: $STATUS"
+
+      # Gradually increase wait time (max 30s)
+      if [ "$WAIT_TIME" -lt 30 ]; then
+        WAIT_TIME=$((WAIT_TIME + 5))
+      fi
+    done
+
+    if [ "$STATUS" != "OK" ]; then
+      echo "❌ Quality Gate failed! Stopping the workflow."
+      exit 1
+    fi
+
+    echo "✅ SonarCloud analysis completed successfully."

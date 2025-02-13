@@ -22,18 +22,18 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
 
       - name: "Check for Vulnerabilities"
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
         run: |
           echo "Checking for vulnerabilities in SonarQube..."
           
           # Fetch the number of vulnerabilities
           VULNERABILITIES=$(curl -s -u $SONAR_TOKEN: \
-            "$SONAR_HOST_URL/api/issues/search?componentKeys=my-project&types=VULNERABILITY&resolved=false" \
+            "https://sonarcloud.io/api/issues/search?componentKeys=my-project&types=VULNERABILITY&resolved=false" \
             | jq -r '.total')
 
           echo "Detected Vulnerabilities: $VULNERABILITIES"

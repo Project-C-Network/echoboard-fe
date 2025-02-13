@@ -1,7 +1,7 @@
 - name: EchoBoard SonarCloud Build Analysis
   env:
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    SONAR_HOST_URL: https://sonarcloud.io
+    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   run: |
     echo "Waiting for SonarCloud to finish analysis..."
     

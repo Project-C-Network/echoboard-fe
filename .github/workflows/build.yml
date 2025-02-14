@@ -1,4 +1,3 @@
-name: Build
 on:
   push:
     branches:
@@ -6,42 +5,35 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+name: Main Workflow
+
 jobs:
   sonarqube:
-    name: SonarQube
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
-
-      - name: Install dependencies
-        run: sudo apt-get install -y jq
+          fetch-depth: 0  # Ensure full history for better SonarQube analysis
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
 
-      - name: "Check for Vulnerabilities"
+      - name: SonarQube Quality Gate Check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          pollingTimeoutSec: 600
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-        run: |
-          echo "Checking for vulnerabilities in SonarQube..."
-          
-          # Fetch the number of vulnerabilities
-          VULNERABILITIES=$(curl -s -u $SONAR_TOKEN: \
-            "https://sonarcloud.io/api/issues/search?componentKeys=my-project&types=VULNERABILITY&resolved=false" \
-            | jq -r '.total')
 
-          echo "Detected Vulnerabilities: $VULNERABILITIES"
+      - name: Show SonarQube Quality Gate Status
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
-          # Fail if any vulnerabilities are found
-          if [ "$VULNERABILITIES" -gt 0 ]; then
-            echo "❌ SonarCloud detected vulnerabilities! Failing the workflow."
-            exit 1
-          fi
-
-          echo "✅ No vulnerabilities found. Proceeding with workflow."
+      - name: Fail if Quality Gate Failed
+        if: steps.sonarqube-quality-gate-check.outputs.quality-gate-status == 'FAILED'
+        run: exit 1

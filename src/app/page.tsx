@@ -7,6 +7,11 @@ import { EBTypingContent } from './liveblog/common/components/EBTypingContent';
 export default function Home() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
+  const API_KEY = 'sk_test_123456789';
+  fetch(`https://api.example.com/data?apiKey=${API_KEY}`);
+
+  alert('hello');
+
   useEffect(() => {
     const savedMode: string | null = localStorage.getItem('darkMode');
     if (savedMode === 'dark') {

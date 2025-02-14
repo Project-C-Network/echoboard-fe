@@ -17,14 +17,14 @@ jobs:
           fetch-depth: 0  # Ensure full history for better SonarQube analysis
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@main
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
 
       - name: SonarQube Quality Gate Check
         id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@main
+        uses: sonarsource/sonarqube-quality-gate-action@master
         with:
           pollingTimeoutSec: 600
         env:

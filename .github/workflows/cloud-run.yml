@@ -47,6 +47,6 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars KEY1=VALUE1,KEY2=VALUE2
+            --set-env-vars KEY1=VALUE1,KEY2=VALUE2 \
             --min-instances 0 \ 
             --max-instances 5

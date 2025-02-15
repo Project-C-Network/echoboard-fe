@@ -11,16 +11,20 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: ["Build and SonarQube Analysis"]
-    types:
-      - completed
 
 jobs:
-  dockerize-and-deploy:
+  check-build-status:
     runs-on: ubuntu-latest
-    needs: build
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Check Build Workflow Status
+        if: ${{ github.event.workflow_run.conclusion != 'success' }}
+        run: |
+          echo "🚨 Build and SonarQube Analysis failed! Skipping deployment."
+          exit 1  # Fail this job if the build failed
+    
+  dockerize-and-deploy:
+    needs: check-build-status
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository

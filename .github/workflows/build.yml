@@ -16,11 +16,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Python Dependencies
+        run: pip install requests
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-        with:
-          args: >
-            -Dsonar.qualitygate.wait=true
+
+      - name: Run Python Sonar Issue Checker
+        env:
+          PROJECT_KEY: ${{ secrets.PROJECT_KEY }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: python check_sonar_issues.py
+        
+      - name: Fail Workflow If Quality Gate Fails
+        if: failure()
+        run: exit 1

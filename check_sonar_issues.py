@@ -14,7 +14,7 @@ SONAR_TOKEN = os.getenv("SONAR_TOKEN")  # SonarCloud token
 
 # Validate required environment variables
 if not SONAR_TOKEN or not PROJECT_KEY:
-    logging.error("❌ ERROR: SONAR_TOKEN or PROJECT_KEY is not set. Check GitHub Secrets.")
+    logging.error("ERROR: SONAR_TOKEN or PROJECT_KEY is not set. Check GitHub Secrets.")
     sys.exit(1)
 
 # API Endpoint
@@ -40,30 +40,30 @@ def fetch_all_issues():
                     "projects": PROJECT_KEY,
                     "branch": BRANCH_NAME,
                     "severities": SEVERITIES,
-                    "ps": max_per_page,  # Max per request
+                    "ps": max_per_page,
                     "p": page
                 },
-                timeout=10  # Add timeout
+                timeout=10
             )
 
             if response.status_code != 200:
-                logging.error(f"❌ API Error: {response.text}")
+                logging.error(f"API Error: {response.text}")
                 sys.exit(1)
 
             data = response.json()
             issues_found = len(data.get("issues", []))
             total_issues += issues_found
 
-            logging.info(f"🔍 Page {page}: Found {issues_found} issues (Total: {total_issues})")
+            logging.info(f"Page {page}: Found {issues_found} issues (Total: {total_issues})")
 
-            # Check if we've fetched all issues
             if issues_found < max_per_page:
                 break
 
-            page += 1  # Go to next page
+            page += 1
+            time.sleep(1)
 
         except requests.exceptions.RequestException as e:
-            logging.error(f"❌ Network Error: {e}")
+            logging.error(f"Network Error: {e}")
             sys.exit(1)
 
     return total_issues
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     logging.info(f"🔎 Total Issues Found: {issue_count}")
 
     if issue_count >= THRESHOLD:
-        logging.error("❌ Quality Gate Failed: Too many issues.")
+        logging.error("Quality Gate Failed: Too many issues.")
         sys.exit(1)  # Fail GitHub Actions workflow
     else:
         logging.info("✅ Quality Gate Passed: Issues within limit.")

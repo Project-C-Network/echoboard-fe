@@ -3,7 +3,7 @@ import React from 'react';
 const LiveBlogPage = () => {
   return (
     <>
-      <h2>Welocome to Live Blog...</h2>
+      <h2>Welocome to Live Blog page...</h2>
     </>
   );
 };

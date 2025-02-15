@@ -70,7 +70,7 @@ def fetch_all_issues():
 
 if __name__ == "__main__":
     issue_count = fetch_all_issues()
-    logging.info(f"🔎 Total Issues Found: {issue_count}")
+    logging.info(f"Total Issues Found: {issue_count}")
 
     if issue_count >= THRESHOLD:
         logging.error("Quality Gate Failed: Too many issues.")

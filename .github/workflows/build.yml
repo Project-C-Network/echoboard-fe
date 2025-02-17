@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-name: Build and SonarQube Analysis
+name: Build
 
 jobs:
   sonarqube:

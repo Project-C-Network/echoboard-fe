@@ -1,4 +1,4 @@
-name: Deploy to Cloud Run
+name: Build for Sonar & Deploy to Cloud Run
 
 env:
   SERVICE_NAME: echoboard-fe

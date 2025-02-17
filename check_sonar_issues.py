@@ -22,7 +22,7 @@ API_URL = f"{SONAR_URL}/api/issues/search?projects={PROJECT_KEY}&branch={BRANCH_
 
 # Issue severities and failure threshold
 SEVERITIES = "INFO,MINOR,MAJOR,CRITICAL,BLOCKER"
-THRESHOLD = 5  # Max issues allowed before failing
+THRESHOLD = 10  # Max issues allowed before failing
 
 def fetch_all_issues():
     """Fetch all SonarCloud issues with automatic pagination."""

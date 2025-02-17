@@ -11,10 +11,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_run:
-    workflows: ["Build"]
-    types:
-      - completed
 
 jobs:
   dockerize-and-deploy:
@@ -23,8 +19,40 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Python Dependencies
+        run: pip install requests
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
+      - name: Run Python Sonar Issue Checker
+        env:
+          PROJECT_KEY: ${{ secrets.PROJECT_KEY }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: python check_sonar_issues.py
+
+      - name: Fail Workflow If Quality Gate Fails
+        if: failure()
+        run: exit 1
+
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Log in to Docker Hub
         run: |

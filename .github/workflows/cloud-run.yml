@@ -37,16 +37,3 @@ jobs:
           docker build -t docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }} .
           docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }}
 
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }} \
-            --platform managed \
-            --region ${{ env.REGION }} \
-            --allow-unauthenticated \
-            --port 3000 \
-            --memory 512Mi \
-            --cpu 1 \
-            --set-env-vars KEY1=VALUE1,KEY2=VALUE2 \
-            --min-instances 0 \
-            --max-instances 5

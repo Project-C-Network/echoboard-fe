@@ -16,8 +16,6 @@ export default function Home() {
     }
   }, []);
 
-  fetch('https://sonarcloud.io');
-
   return (
     <div className='md:container w-container-fluid'>
       <div className='relative'>

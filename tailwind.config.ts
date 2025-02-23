@@ -34,7 +34,7 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         EBPrimary: {
-          100: '#03a9f4',
+          100: '#03a9f4', 
           200: '#2196f3',
         },
         EBSecondary: '#ffeb3b',

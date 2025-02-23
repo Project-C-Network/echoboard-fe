@@ -1,8 +1,8 @@
 'use client';
 import { useEffect } from 'react';
+import { EBButton } from './common/common/components/EBButton';
+import { EBTypingContent } from './common/common/components/EBTypingContent';
 import { useDarkMode } from './common/common/hooks/useDarkMode';
-import { EBButton } from './liveblog/common/components/EBButton';
-import { EBTypingContent } from './liveblog/common/components/EBTypingContent';
 
 export default function Home() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();

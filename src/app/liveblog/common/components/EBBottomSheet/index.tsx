@@ -14,7 +14,7 @@ export const EBBottomSheet: React.FC<EBBottomSheetProps> = ({ children }) => {
 
   return (
     <div
-      className='fixed bottom-0 left-0 w-[70%] bg-EBPrimary-100/60 backdrop-blur-md rounded-t-3xl shadow-lg'
+      className='fixed bottom-0 left-0 sm:w-[100%] lg:w-[70%] bg-EBPrimary-100/60 backdrop-blur-md rounded-t-3xl shadow-lg'
       style={{
         height: isOpen ? '50vh' : '80px',
         transition: 'height 0.2s ease-in-out',

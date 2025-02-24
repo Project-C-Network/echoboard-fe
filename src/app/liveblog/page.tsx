@@ -1,16 +1,23 @@
 'use client';
 import React from 'react';
 import { EBBottomSheet } from './common/components/EBBottomSheet';
+import EBSidebar from './common/components/EBSidebar';
+import { useToggle } from './common/hooks';
 
 const LiveBlogPage = () => {
+  const { close, isOpen, toggle } = useToggle();
+
   return (
     <>
       <div className='relative w-full h-screen shadow-sm shadow-gray-400 overflow-hidden'>
         <div className='absolute z-20 top-0 right-0 left-0 h-36 px-3 text-lg font-manrope font-semibold text-white bg-EBPrimary-100'>
+          <div className='pt-5'>
+            <i className='ri-menu-line text-26 lg:hidden' role='button' onClick={toggle} />
+          </div>
           <p className='text-center text-EBLight pt-3'>Marque Text</p>
         </div>
         <div className='flex pt-36 w-full h-screen'>
-          <div className='w-[70%] overflow-auto h-screen bg-EBLight p-3'>
+          <div className='lg:w-[70%] overflow-auto h-screen bg-EBLight p-3'>
             <p className='text-center text-EBDark'>Chat</p>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
@@ -127,10 +134,13 @@ const LiveBlogPage = () => {
               cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
           </div>
-          <div className='w-[30%] h-screen bg-EBPrimary-100 p-3'>
+          <div className='w-[30%] h-screen bg-EBPrimary-100 p-3 sm:hidden lg:block'>
             <p className='text-center text-EBLight'>Chat</p>
           </div>
         </div>
+        <EBSidebar isOpen={isOpen} close={close}>
+          <p className='mt-8'>Profile</p>
+        </EBSidebar>
       </div>
       <EBBottomSheet>
         <p className='text-center text-EBLight pt-5'>Chat Comment History</p>

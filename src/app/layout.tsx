@@ -1,4 +1,5 @@
 import { Poppins, Roboto } from 'next/font/google';
+import EBReactScan from './common/common/components/EBReactScan';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -26,6 +27,7 @@ export default function rootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <EBReactScan />
       <head>
         <link
           href='https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css'

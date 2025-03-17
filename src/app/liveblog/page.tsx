@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import EBBanner from './common/components/EBBanner';
 import EBBlogTiles from './common/components/EBBlogTiles';
@@ -5,6 +6,8 @@ import EBPairTiles from './common/components/EBPairTiles';
 import EBToggleButtons from './common/components/EBToggleButtons';
 
 const LiveBlogPage = () => {
+  // const { close, isOpen, toggle } = useToggle();
+
   return (
     <div>
       <EBBanner />

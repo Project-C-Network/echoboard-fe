@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,7 +11,7 @@ export default {
     extend: {
       container: {
         center: true,
-        padding: '2rem',
+        padding: '4rem',
         screens: {
           sm: '100%',
           md: '768px',
@@ -20,7 +21,7 @@ export default {
         },
       },
       screens: {
-        sm: '640px',
+        sm: '320px',
         md: '768px',
         lg: '1024px',
         xl: '1280px',
@@ -33,7 +34,7 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         EBPrimary: {
-          100: '#03a9f4',
+          100: '#03a9f4', 
           200: '#2196f3',
         },
         EBSecondary: '#ffeb3b',

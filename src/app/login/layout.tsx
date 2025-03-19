@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default function FeedbackLayout({
   children,
@@ -6,8 +6,8 @@ export default function FeedbackLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body style={{backgroundColor: 'teal', color: '#fff'}}>{children}</body>
+    <html lang='en'>
+      <body style={{ backgroundColor: 'teal', color: '#fff' }}>{children}</body>
     </html>
   );
 }

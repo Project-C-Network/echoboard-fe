@@ -1,5 +1,6 @@
 import { Poppins, Roboto } from 'next/font/google';
 import EBReactScan from './common/common/components/EBReactScan';
+import SessionProviders from './login/common/store/sessionprovider';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -38,7 +39,7 @@ export default function rootLayout({
         suppressHydrationWarning
         className={`${poppins.variable} ${roboto.variable} antialiased`}
       >
-        {children}
+        <SessionProviders>{children}</SessionProviders>
       </body>
     </html>
   );

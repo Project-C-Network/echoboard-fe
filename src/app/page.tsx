@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { EBButton } from './common/common/components/EBButton';
 import { EBTypingContent } from './common/common/components/EBTypingContent';
 import { useDarkMode } from './common/common/hooks/useDarkMode';
+import { handleSignIn } from './login/common/utils/action';
 
 export default function Home() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -53,11 +54,15 @@ export default function Home() {
   "EchoBoard is a temporary chat-based Q&A platform where questions get quick answers
   and disappear once resolved. Engage, contribute, and keep discussions fresh!"`}
           />
-          <EBButton>
-            <div className='flex items-center justify-center'>
-              <i className='ri-google-fill text-26 pe-3' /> Sign in with Google
-            </div>
-          </EBButton>
+
+          <form action={handleSignIn}>
+            <EBButton>
+              <div className='flex items-center justify-center'>
+                <i className='ri-google-fill text-26 pe-3' /> Sign in with Google
+              </div>
+            </EBButton>
+          </form>
+
           <h1 className='flex items-center mt-5 text-center text-xl p-4 min-w-[550px]'>
             <span className='flex-grow h-[2px] bg-EBLight'></span>
             <span className='mx-2 text-EBLight font-semibold'>OR</span>

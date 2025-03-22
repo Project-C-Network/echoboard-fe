@@ -1,27 +1,28 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import EBBanner from './common/components/EBBanner';
-import EBBlogTiles from './common/components/EBBlogTiles';
-import EBPairTiles from './common/components/EBPairTiles';
-import EBToggleButtons from './common/components/EBToggleButtons';
+import EBNavigationPanel from './common/components/EBNavigationPanel';
+import EBChatInterface from './common/components/EBChatInterface';
+import EBUserProfileCard from './common/components/EBUserProfileCard';
 
 const LiveBlogPage = () => {
-  // const { close, isOpen, toggle } = useToggle();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, []);
 
   return (
-    <div>
-      <EBBanner />
-      <section className='flex'>
-        <section className='w-3/5 bg-orange'>
-          <div className='flex flex-col items-center p-4'>
-            <EBToggleButtons />
-            <EBBlogTiles />
-          </div>
-        </section>
-        <section className='w-2/5 bg-pink'>
-          <EBPairTiles />
-        </section>
-      </section>
+    <div className='min-h-screen bg-gray-100 p-4'>
+      <div className='max-w-7xl mx-auto'>
+        <EBBanner />
+        <div className='grid grid-cols-1 md:grid-cols-[1.2fr_2.25fr_0.5fr]'>
+          <EBNavigationPanel />
+          <EBChatInterface />
+          <EBUserProfileCard />
+        </div>
+      </div>
     </div>
   );
 };

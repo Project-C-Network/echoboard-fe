@@ -17,12 +17,7 @@ const LiveBlogPage = () => {
 
   if (status === 'loading') return <p>Loading...</p>;
 
-  if (!session)
-    return (
-      <>
-        <p>Authenication failed!</p>
-      </>
-    );
+  if (!session) return <p>Authenication failed!</p>;
 
   const handleLogout = () => {
     logout();
@@ -34,7 +29,12 @@ const LiveBlogPage = () => {
         <div className='relative w-full h-screen shadow-sm shadow-gray-400 overflow-hidden'>
           <div className='absolute z-20 top-0 right-0 left-0 h-48 px-3 text-lg font-manrope font-semibold text-white bg-EBPrimary-100'>
             <div className='pt-5'>
-              <i className='ri-menu-line text-26 lg:hidden' role='button' onClick={toggle} />
+              <i
+                className='ri-menu-line text-26 lg:hidden'
+                role='button'
+                tabIndex={0}
+                onClick={toggle}
+              />
             </div>
             <p className='text-center text-EBLight pt-3'>Marque Text</p>
           </div>

@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
+import useSmoothScroll from './common/hooks/useSmoothScroll';
 
 const EBBanner = lazy(() => import('./common/components/EBBanner'));
 const EBNavigationPanel = lazy(() => import('./common/components/EBNavigationPanel'));
@@ -9,12 +10,7 @@ const EBUserProfileCard = lazy(() => import('./common/components/EBUserProfileCa
 const GRID_LAYOUT = 'grid grid-cols-1 md:grid-cols-[1.2fr_2.25fr_0.5fr]';
 
 const LiveBlogPage = () => {
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }, []);
+  useSmoothScroll();
 
   return (
     <div className='min-h-screen bg-gray-100 p-4'>

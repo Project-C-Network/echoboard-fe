@@ -1,5 +1,5 @@
 'use client';
-import React, { useId } from 'react';
+import React from 'react';
 
 interface EBStarRatingProps {
   rating: number;
@@ -7,15 +7,13 @@ interface EBStarRatingProps {
 }
 
 const EBStarRating: React.FC<EBStarRatingProps> = ({ rating, className = '' }) => {
-  const id = useId();
-
   return (
     <div className={`flex justify-center space-x-1 ${className}`}>
       {[...Array(rating)].map((_, index) => (
-        <i key={`${id}-${index}`} className='ri-star-fill text-2xl text-EBAmber'></i>
+        <i key={`star-${index + 1}`} className='ri-star-fill text-2xl text-EBAmber'></i>
       ))}
     </div>
   );
 };
 
-export default EBStarRating;
+export default React.memo(EBStarRating);

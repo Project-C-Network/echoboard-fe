@@ -2,16 +2,13 @@
 
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import * as React from 'react';
+import { EBTypingContentProps } from '../../utils/interfaces';
 
 export function EBTypingContent({
   text = 'Welcome',
   motionType = 'Typing',
   className = '',
-}: {
-  text?: string[] | string;
-  motionType?: string;
-  className?: string;
-}) {
+}: EBTypingContentProps) {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
   const [index, setIndex] = React.useState<number>(0);

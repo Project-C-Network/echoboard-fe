@@ -19,7 +19,7 @@ const EBCommentCard = ({ comment, isExpanded, toggleExpand }: EBCommentCardProps
 
   return (
     <div className='flex justify-end'>
-      <div className='bg-EBPrimary-100/50 border-2 border-EBSecondary p-3 rounded-lg max-w-lg w-full'>
+      <div className='bg-EBPrimary-100/90 border-2 border-EBSecondary p-3 rounded-lg max-w-lg w-full'>
         <div className='flex items-start gap-2'>
           <div className='w-8 h-8 rounded-full overflow-hidden'>
             <Image

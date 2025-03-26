@@ -73,6 +73,6 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars KEY1=VALUE1,KEY2=VALUE2 \
+            --set-env-vars AUTH_SECRET=${{ secrets.AUTH_SECRET }},AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }},AUTH_GOOGLE_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }} \
             --min-instances 0 \
             --max-instances 5

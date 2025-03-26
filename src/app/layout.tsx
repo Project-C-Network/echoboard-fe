@@ -27,7 +27,7 @@ export default function rootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning={true}>
       <EBReactScan />
       <head>
         <link
@@ -36,7 +36,7 @@ export default function rootLayout({
         />
       </head>
       <body
-        suppressHydrationWarning
+        suppressHydrationWarning={true}
         className={`${poppins.variable} ${roboto.variable} antialiased`}
       >
         <SessionProviders>{children}</SessionProviders>

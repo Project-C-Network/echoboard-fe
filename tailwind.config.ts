@@ -34,7 +34,7 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         EBPrimary: {
-          100: '#03a9f4', 
+          100: '#03a9f4',
           200: '#2196f3',
         },
         EBSecondary: '#ffeb3b',
@@ -48,6 +48,7 @@ export default {
         EBDanger: '#f44336',
         EBOliveGreen: '#b0ba46',
         EBAmber: '#ff9800',
+        EBGray: '#808080',
       },
       fontWeight: {
         thin: '100',

@@ -36,44 +36,47 @@ const EBNavigationPanel = () => {
   }, []);
 
   return (
-    <div className='bg-EBPrimary-100 shadow-md p-4'>
+    <div className='bg-EBPrimary-100 shadow-md p-4 pb-0 flex flex-col h-full overflow-hidden'>
       <Suspense fallback={<div>Loading Toggle Button...</div>}>
         <EBToggleButton />
       </Suspense>
-      <div className='space-y-4 mx-4'>
-        {USERS.map((item) => (
-          <a
-            key={item}
-            href='#'
-            className={`relative w-full border-2 rounded-lg p-4 transition-all duration-200 bg-EBLight hover:shadow-lg hover:scale-105 text-left focus:outline-none block no-underline ${
-              selectedItem === item ? 'border-EBSecondary bg-EBLight/75' : 'border-EBMaroon'
-            }`}
-            onClick={handleCardClick(item)}
-            onKeyDown={handleCardKeyDown(item)}
-            aria-label={`Select card for User ${item}`}
-          >
-            <div className='pointer-events-none'>
-              <div className='flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-2'>
-                <div className='w-8 h-8 rounded-full overflow-hidden'>
-                  <Image
-                    src={`https://i.pravatar.cc/150?img=${item}`}
-                    alt={`User ${item}`}
-                    width={32}
-                    height={32}
-                    className='w-full h-full object-cover'
-                  />
-                </div>
-                <div className='flex-1'>
-                  <p className='text-EBPrimary-100 font-semibold'>User {item}</p>
-                  <p className='text-EBPrimary-100'>What is the best morning diet?</p>
+      <div className='overflow-y-auto flex-1'>
+        <div className='space-y-4 mx-4'>
+          {USERS.map((item) => (
+            <a
+              key={item}
+              href='#'
+              className={`relative w-full border-2 rounded-lg p-4 transition-all duration-200 bg-EBLight hover:shadow-lg text-left focus:outline-none block no-underline ${
+                selectedItem === item ? 'border-EBSecondary bg-EBLight/75' : 'border-EBMaroon'
+              }`}
+              onClick={handleCardClick(item)}
+              onKeyDown={handleCardKeyDown(item)}
+              aria-label={`Select card for User ${item}`}
+            >
+              <div className='pointer-events-none'>
+                <div className='flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-2'>
+                  <div className='w-8 h-8 rounded-full overflow-hidden'>
+                    <Image
+                      src={`https://i.pravatar.cc/150?img=${item}`}
+                      alt={`User ${item}`}
+                      width={32}
+                      height={32}
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
+                  <div className='flex-1'>
+                    <p className='text-EBPrimary-100 font-semibold'>User {item}</p>
+                    <p className='text-EBPrimary-100'>What is the best morning diet?</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <Suspense fallback={<div>Loading Interaction Buttons...</div>}>
-              <EBInteractionButtons data={QUESTIONS} onButtonClick={handleButtonClick} />
-            </Suspense>
-          </a>
-        ))}
+              <Suspense fallback={<div>Loading Interaction Buttons...</div>}>
+                <EBInteractionButtons data={QUESTIONS} onButtonClick={handleButtonClick} />
+              </Suspense>
+            </a>
+          ))}
+          <div className='mb-4' />
+        </div>
       </div>
     </div>
   );

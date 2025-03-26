@@ -23,20 +23,23 @@ const EBChatInterface = () => {
   }, []);
 
   return (
-    <div className='bg-EBLight shadow-md p-4'>
-      <div className='space-y-4'>
-        <Suspense fallback={<div>Loading Question Card...</div>}>
-          <EBQuestionCard question={question} />
-        </Suspense>
-        {comments.map((comment) => (
-          <Suspense key={comment.id} fallback={<div>Loading Comment Card...</div>}>
-            <EBCommentCard
-              comment={comment}
-              isExpanded={expandedStates.has(comment.id)}
-              toggleExpand={toggleExpand}
-            />
+    <div className='bg-EBLight shadow-md p-4 pb-0 flex flex-col h-full overflow-hidden'>
+      <div className='overflow-y-auto flex-1'>
+        <div className='space-y-4'>
+          <Suspense fallback={<div>Loading Question Card...</div>}>
+            <EBQuestionCard question={question} />
           </Suspense>
-        ))}
+          {comments.map((comment) => (
+            <Suspense key={comment.id} fallback={<div>Loading Comment Card...</div>}>
+              <EBCommentCard
+                comment={comment}
+                isExpanded={expandedStates.has(comment.id)}
+                toggleExpand={toggleExpand}
+              />
+            </Suspense>
+          ))}
+          <div className='mb-4' />
+        </div>
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ const LiveBlogPage = () => {
   useSmoothScroll();
 
   return (
-    <div className='min-h-screen bg-gray-100'>
-      <div className='max-w-7xl mx-auto h-screen flex flex-col overflow-hidden p-4'>
+    <div className='h-screen bg-gray-100 overflow-hidden'>
+      <div className='max-w-7xl mx-auto h-full flex flex-col p-4'>
         <EBBanner />
         <div className={GRID_LAYOUT}>
           <Suspense fallback={<div>Loading...</div>}>

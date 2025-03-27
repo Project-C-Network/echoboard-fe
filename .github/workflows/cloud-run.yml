@@ -1,7 +1,7 @@
 name: Build for Sonar & Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: echoboard-fe
+  SERVICE_NAME: echoboard-fe-293748673085
   REGION: us-central1
 
 on:
@@ -73,6 +73,10 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars KEY1=VALUE1,KEY2=VALUE2 \
-            --min-instances 0 \
+            --set-env-vars "NEXTAUTH_URL=https://echoboard-fe-293748673085.us-central1.run.app" \
+            --set-env-vars "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
+            --set-env-vars "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
+            --set-env-vars "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+            --set-env-vars "NODE_ENV=production" \
+            --min-instances 1 \
             --max-instances 5

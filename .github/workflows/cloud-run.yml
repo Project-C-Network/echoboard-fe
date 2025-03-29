@@ -46,7 +46,7 @@ jobs:
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'https://iam.googleapis.com/projects/293748673085/locations/global/workloadIdentityPools/echoboard-fe-pool/providers/echoboard-fe-provider'
+          workload_identity_provider: 'projects/293748673085/locations/global/workloadIdentityPools/echoboard-fe-pool/providers/echoboard-fe-provider'
           service_account: 'echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com'
 
       - uses: google-github-actions/setup-gcloud@v2

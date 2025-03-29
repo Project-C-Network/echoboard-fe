@@ -6,24 +6,21 @@ env:
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   dockerize-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'  # Critical for Workload Identity
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Set Up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.x"
 
@@ -49,19 +46,20 @@ jobs:
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          workload_identity_provider: 'https://iam.googleapis.com/projects/293748673085/locations/global/workloadIdentityPools/echoboard-fe-pool/providers/echoboard-fe-provider'
+          service_account: 'echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com'
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v2
 
-      - name: Log in to Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push Docker Image to Docker Hub
-        run: |
-          docker build -t docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }} .
-          docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }}
+      - name: Build and Push to Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         run: |
@@ -73,10 +71,15 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars "NEXTAUTH_URL=https://echoboard-fe-293748673085.us-central1.run.app" \
+            --set-env-vars "NEXTAUTH_URL=https://${{ env.SERVICE_NAME }}.${{ env.REGION }}.run.app" \
             --set-env-vars "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
             --set-env-vars "GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_ID }}" \
             --set-env-vars "GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}" \
             --set-env-vars "NODE_ENV=production" \
             --min-instances 1 \
             --max-instances 5
+
+      - name: Verify Deployment
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region ${{ env.REGION }} --format='value(status.url)')
+          curl -sSf --retry 3 --retry-delay 5 "$URL" >/dev/null || exit 1

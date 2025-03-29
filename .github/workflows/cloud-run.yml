@@ -51,15 +51,14 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      - name: Build and Push to Docker Hub
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }}
+      - name: Build and Push Docker Image to Docker Hub
+        run: |
+          docker build -t docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }} .
+          docker push docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/echoboard-fe:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         run: |

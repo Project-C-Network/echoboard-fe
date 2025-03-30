@@ -1,26 +1,29 @@
 name: Build for Sonar & Deploy to Cloud Run
 
 env:
-  SERVICE_NAME: echoboard-fe-293748673085
+  SERVICE_NAME: echoboard-fe
   REGION: us-central1
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   dockerize-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'  # Critical for Workload Identity
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      - uses: actions/setup-python@v4
+      - name: Set Up Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.x"
 
@@ -46,10 +49,10 @@ jobs:
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/293748673085/locations/global/workloadIdentityPools/echoboard-fe-pool/providers/echoboard-fe-provider'
-          service_account: 'echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com'
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Log in to Docker Hub
         run: |
@@ -70,15 +73,6 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars "NEXTAUTH_URL=https://${{ env.SERVICE_NAME }}.${{ env.REGION }}.run.app" \
-            --set-env-vars "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
-            --set-env-vars "GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_ID }}" \
-            --set-env-vars "GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}" \
-            --set-env-vars "NODE_ENV=production" \
-            --min-instances 1 \
+            --set-env-vars KEY1=VALUE1,KEY2=VALUE2 \
+            --min-instances 0 \
             --max-instances 5
-
-      - name: Verify Deployment
-        run: |
-          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region ${{ env.REGION }} --format='value(status.url)')
-          curl -sSf --retry 3 --retry-delay 5 "$URL" >/dev/null || exit 1

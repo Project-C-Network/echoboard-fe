@@ -51,6 +51,15 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
+      - name: Rotate Keys
+  run: |
+    gcloud iam service-accounts keys list \
+      --iam-account=echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com \
+      --format="value(KEY_ID)" | tail -n +2 | xargs -I {} \
+      gcloud iam service-accounts keys delete {} \
+        --iam-account=echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com
+
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 

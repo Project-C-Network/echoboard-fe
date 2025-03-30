@@ -73,7 +73,7 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars "NEXTAUTH_URL=https://echoboard-fe-293748673085.us-central1.run.app" \
+            --set-env-vars "NEXTAUTH_URL=https://echoboard-fe-293748673085-293748673085.us-central1.run.app" \
             --set-env-vars "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
             --set-env-vars "GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_ID }}" \
             --set-env-vars "GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}" \

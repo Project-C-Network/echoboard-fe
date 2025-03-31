@@ -51,6 +51,7 @@ jobs:
           audience: 'https://token.actions.githubusercontent.com'
           create_credentials_file: true
           token_format: 'access_token'
+          export_environment_variables: true
 
       - uses: google-github-actions/setup-gcloud@v2
 

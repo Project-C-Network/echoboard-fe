@@ -51,9 +51,6 @@ jobs:
           audience: 'https://token.actions.githubusercontent.com'
           create_credentials_file: true
           token_format: 'access_token'
-          git_repo_owner: 'Project-C-Network'
-          git_repo_name: 'echoboard-fe'
-          access_token_lifetime: '3600s'
 
       - uses: google-github-actions/setup-gcloud@v2
 

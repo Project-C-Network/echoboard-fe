@@ -6,26 +6,23 @@ env:
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   dockerize-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'  # Critical for Workload Identity
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Set Up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install Python Dependencies
         run: pip install requests
@@ -49,18 +46,16 @@ jobs:
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          workload_identity_provider: 'projects/293748673085/locations/global/workloadIdentityPools/echoboard-fe-pool/providers/echoboard-fe-provider'
+          service_account: 'echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com'
+          audience: 'https://token.actions.githubusercontent.com'
+          create_credentials_file: true
+          token_format: 'access_token'
+          git_repo_owner: 'Project-C-Network'
+          git_repo_name: 'echoboard-fe'
+          access_token_lifetime: '3600s'
 
-      - name: Rotate Keys
-        run: |
-          gcloud iam service-accounts keys list \
-          --iam-account=echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com \
-          --format="value(KEY_ID)" | tail -n +2 | xargs -I {} \
-          gcloud iam service-accounts keys delete {} \
-          --iam-account=echoboard-fe@echoboard-fe-451007.iam.gserviceaccount.com
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v2
 
       - name: Log in to Docker Hub
         run: |
@@ -81,10 +76,15 @@ jobs:
             --port 3000 \
             --memory 512Mi \
             --cpu 1 \
-            --set-env-vars "NEXTAUTH_URL=https://echoboard-fe-293748673085-293748673085.us-central1.run.app" \
+            --set-env-vars "NEXTAUTH_URL=https://${{ env.SERVICE_NAME }}.${{ env.REGION }}.run.app" \
             --set-env-vars "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
             --set-env-vars "GOOGLE_CLIENT_ID=${{ secrets.AUTH_GOOGLE_ID }}" \
             --set-env-vars "GOOGLE_CLIENT_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}" \
             --set-env-vars "NODE_ENV=production" \
             --min-instances 1 \
             --max-instances 5
+
+      - name: Verify Deployment
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region ${{ env.REGION }} --format='value(status.url)')
+          curl -sSf --retry 3 --retry-delay 5 "$URL" >/dev/null || exit 1
